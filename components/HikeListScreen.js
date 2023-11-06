@@ -11,7 +11,9 @@ const HikeListScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
+  const [isDataAvailable, setDataAvailability] = useState(false);
   const [hikeList, setHikeList] = useState([]); // initialized array list
+
 
   useEffect(() => createTable, []);
   useEffect(() => {
@@ -50,6 +52,8 @@ const HikeListScreen = () => {
             console.log(results.rows.item(i));
           }
           setHikeList(temp);
+
+          setDataAvailability(results.rows.length > 0);
         },
         (tx, error) => { console.log('Error in showing hike.') }
       )
@@ -173,15 +177,21 @@ const HikeListScreen = () => {
   return (
     <View style={styles.container}>
 
+      {isDataAvailable ? (
       <FlatList style={{ marginBottom: 10 }}
         data={hikeList}
         renderItem={({ item }) => showHikeItem(item)}
       />
+    ) : (
+      <Text style={styles.noDataText}>No hike data found.</Text>
+    )}
 
+    {isDataAvailable && (
       <TouchableOpacity style={styles.deleteAllButton} onPress={deleteAllHikeConfirmAlert}>
         <MaterialCommunityIcons name="delete" color="white" size={24} />
         <Text style={{ color: 'white', marginStart: 5 }}>Delete all hike</Text>
       </TouchableOpacity>
+    )}
 
     </View>
   )
@@ -226,6 +236,11 @@ const styles = StyleSheet.create(
     horizontalLine: {
       borderBottomColor: 'black',
       borderBottomWidth: 1,
+    },
+    noDataText: {
+      textAlign: 'center',
+      fontSize: 18,
+      marginTop: 20,
     },
   }
 )
