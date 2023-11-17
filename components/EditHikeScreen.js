@@ -183,7 +183,6 @@ const EditHikeScreen = () => {
 
 
       <View style={styles.container}>
-        <Text style={styles.titleText}>Add Hiking Details</Text>
 
         <TextInput
           style={styles.input}
